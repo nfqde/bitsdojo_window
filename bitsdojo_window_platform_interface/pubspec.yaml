@@ -4,6 +4,7 @@ homepage: https://github.com/bitsdojo/bitsdojo_window/bitsdojo_window_platform_i
 # NOTE: We strongly prefer non-breaking changes, even at the expense of a
 # less-clean API. See https://flutter.dev/go/platform-interface-breaking-changes
 version: 0.1.0
+publish_to: 'none'
 
 dependencies:
   flutter:
