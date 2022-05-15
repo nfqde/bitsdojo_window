@@ -1,5 +1,4 @@
-import 'dart:ffi';
-import 'dart:ui';
+import 'dart:ffi' hide Size;
 import 'package:flutter/painting.dart';
 
 import 'package:ffi/ffi.dart';
@@ -26,11 +25,8 @@ Rect getScreenRectForWindow(int handle) {
   final monitorInfo = calloc<MONITORINFO>()..ref.cbSize = sizeOf<MONITORINFO>();
   final result = GetMonitorInfo(monitor, monitorInfo);
   if (result == TRUE) {
-    return Rect.fromLTRB(
-        monitorInfo.ref.rcWork.left.toDouble(),
-        monitorInfo.ref.rcWork.top.toDouble(),
-        monitorInfo.ref.rcWork.right.toDouble(),
-        monitorInfo.ref.rcWork.bottom.toDouble());
+    return Rect.fromLTRB(monitorInfo.ref.rcWork.left.toDouble(), monitorInfo.ref.rcWork.top.toDouble(),
+        monitorInfo.ref.rcWork.right.toDouble(), monitorInfo.ref.rcWork.bottom.toDouble());
   }
   return Rect.zero;
 }
@@ -63,8 +59,8 @@ class WinWindow extends WinDesktopWindow {
 
   set rect(Rect newRect) {
     if (!isValidHandle(handle, "set rectangle")) return;
-    setWindowPos(handle!, 0, newRect.left.toInt(), newRect.top.toInt(),
-        newRect.width.toInt(), newRect.height.toInt(), 0);
+    setWindowPos(
+        handle!, 0, newRect.left.toInt(), newRect.top.toInt(), newRect.width.toInt(), newRect.height.toInt(), 0);
   }
 
   Size get size {
@@ -149,8 +145,7 @@ class WinWindow extends WinDesktopWindow {
     if (_alignment != null) {
       if (!isValidHandle(handle, "set alignment")) return;
       final screenRect = getScreenRectForWindow(handle!);
-      final rectOnScreen =
-          getRectOnScreen(sizeOnScreen, _alignment!, screenRect);
+      final rectOnScreen = getRectOnScreen(sizeOnScreen, _alignment!, screenRect);
       this.rect = rectOnScreen;
     }
   }
@@ -199,8 +194,7 @@ class WinWindow extends WinDesktopWindow {
     Size sizeToSet = Size(width, height);
     _sizeSetFromDart = sizeToSet;
     if (_alignment == null) {
-      SetWindowPos(handle!, 0, 0, 0, sizeToSet.width.toInt(),
-          sizeToSet.height.toInt(), SWP_NOMOVE);
+      SetWindowPos(handle!, 0, 0, 0, sizeToSet.width.toInt(), sizeToSet.height.toInt(), SWP_NOMOVE);
     } else {
       final sizeOnScreen = getSizeOnScreen((sizeToSet));
       final screenRect = getScreenRectForWindow(handle!);
@@ -229,21 +223,18 @@ class WinWindow extends WinDesktopWindow {
 
   set position(Offset newPosition) {
     if (!isValidHandle(handle, "set position")) return;
-    SetWindowPos(handle!, 0, newPosition.dx.toInt(), newPosition.dy.toInt(), 0,
-        0, SWP_NOSIZE);
+    SetWindowPos(handle!, 0, newPosition.dx.toInt(), newPosition.dy.toInt(), 0, 0, SWP_NOSIZE);
   }
 
   void show() {
     if (!isValidHandle(handle, "show")) return;
-    setWindowPos(
-        handle!, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+    setWindowPos(handle!, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
     forceChildRefresh(handle!);
   }
 
   void hide() {
     if (!isValidHandle(handle, "hide")) return;
-    SetWindowPos(
-        handle!, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_HIDEWINDOW);
+    SetWindowPos(handle!, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_HIDEWINDOW);
   }
 
   @Deprecated("use show()/hide() instead")
