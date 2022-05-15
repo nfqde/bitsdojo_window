@@ -1,6 +1,5 @@
 import './window.dart';
 import 'package:flutter/rendering.dart';
-import 'dart:ui';
 
 class NotImplementedWindow extends DesktopWindow {
   int get handle {
@@ -74,8 +73,7 @@ class NotImplementedWindow extends DesktopWindow {
   }
 
   Size get titleBarButtonSize {
-    throw UnimplementedError(
-        'titleBarButtonSize getter has not been implemented.');
+    throw UnimplementedError('titleBarButtonSize getter has not been implemented.');
   }
 
   double get titleBarHeight {
